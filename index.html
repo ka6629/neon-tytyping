@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neon Typing Auto ブックマークレット</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #020617;
+      --card: rgba(15, 23, 42, .82);
+      --line: rgba(148, 163, 184, .24);
+      --text: #e5edff;
+      --muted: #a6b3cf;
+      --accent: #8b5cf6;
+      --accent-2: #22d3ee;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(34, 211, 238, .18), transparent 32rem),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, .22), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+    }
+
+    main {
+      width: min(940px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0;
+    }
+
+    .hero, .card {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--card);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .32);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero {
+      padding: 34px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -60px -120px auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 999px;
+      background: rgba(34, 211, 238, .12);
+      filter: blur(6px);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: -.05em;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.25rem;
+    }
+
+    p, li {
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    strong { color: #fff; }
+
+    .bookmarklet {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+      padding: 16px 22px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 14px 34px rgba(34, 211, 238, .22);
+      user-select: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .card {
+      padding: 24px;
+    }
+
+    .code {
+      width: 100%;
+      min-height: 96px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(2, 6, 23, .78);
+      color: #dbeafe;
+      font: 12px ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    .button {
+      margin-top: 12px;
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      background: #334155;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .button:hover { background: #475569; }
+
+    .note {
+      margin-top: 14px;
+      border-left: 4px solid var(--accent-2);
+      padding: 10px 14px;
+      background: rgba(34, 211, 238, .08);
+      border-radius: 12px;
+    }
+
+    a { color: #bfdbfe; }
+
+    @media (max-width: 760px) {
+      main { padding: 24px 0; }
+      .hero, .card { border-radius: 22px; padding: 22px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>Neon Typing Auto</h1>
+      <p>
+        <strong>https://otonasi-muonn.github.io/typing_game/</strong> 専用の超高速自動タイピング用ブックマークレットです。
+        別PCではこのページを開き、下のリンクをブックマークバーへ追加してください。
+      </p>
+      <a id="bookmarkletLink" class="bookmarklet" href="#">NeonTyping Auto をブックマーク</a>
+      <p class="note">このリンクはクリックして使うものではなく、ブックマークバーへドラッグして登録します。</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>使い方</h2>
+        <ol>
+          <li>このページを別PCのブラウザで開きます。</li>
+          <li><strong>NeonTyping Auto をブックマーク</strong> をブックマークバーへドラッグします。</li>
+          <li><a href="https://otonasi-muonn.github.io/typing_game/" target="_blank" rel="noreferrer">タイピングサイト</a>を開きます。</li>
+          <li>登録したブックマークを押すと、自動でスタートして高速入力します。</li>
+          <li>停止したい時は右下のステータスパネルをクリックします。</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h2>ドラッグできない場合</h2>
+        <p>下のコードをコピーし、新しいブックマークのURL欄に貼り付けてください。</p>
+        <textarea id="bookmarkletCode" class="code" readonly></textarea>
+        <button id="copyButton" class="button" type="button">コードをコピー</button>
+        <p id="copyStatus" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const scriptUrl = new URL("bookmarklet.js", location.href).href;
+    const bookmarklet = `javascript:(()=>{const s=document.createElement('script');s.src=${JSON.stringify(scriptUrl)}+'?t='+Date.now();document.documentElement.appendChild(s)})()`;
+    const link = document.getElementById("bookmarkletLink");
+    const code = document.getElementById("bookmarkletCode");
+    const copyButton = document.getElementById("copyButton");
+    const copyStatus = document.getElementById("copyStatus");
+
+    link.href = bookmarklet;
+    code.value = bookmarklet;
+
+    copyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(bookmarklet);
+        copyStatus.textContent = "コピーしました。ブックマークのURL欄に貼り付けてください。";
+      } catch {
+        code.select();
+        document.execCommand("copy");
+        copyStatus.textContent = "選択中のコードをコピーしました。";
+      }
+    });
+  </script>
+</body>
+</html>
