@@ -1,7 +1,7 @@
 (() => {
   const TARGET_ORIGIN = "https://otonasi-muonn.github.io";
   const TARGET_PATH = "/typing_game/";
-  const MIN_DELAY_MS = 1;
+  const MAX_BURST_KEYS = 10000;
 
   if (location.origin !== TARGET_ORIGIN || !location.pathname.startsWith(TARGET_PATH)) {
     alert("Neon Typing のページで実行してください。\n" + TARGET_ORIGIN + TARGET_PATH);
@@ -75,7 +75,6 @@
 
   const autoTyper = {
     running: true,
-    delayMs: MIN_DELAY_MS,
     panel: null,
     idleCycles: 0,
     typedCount: 0,
@@ -108,13 +107,27 @@
           continue;
         }
 
-        const nextKey = getNextKey();
-        if (nextKey) {
-          dispatchKey(nextKey);
-          this.typedCount += 1;
-          this.idleCycles = 0;
-          this.setStatus(`入力中: ${nextKey} / ${this.typedCount}打鍵`);
-          await sleep(this.delayMs);
+        if (isScreenActive("screen-playing")) {
+          let burstCount = 0;
+
+          while (this.running && isScreenActive("screen-playing") && burstCount < MAX_BURST_KEYS) {
+            const nextKey = getNextKey();
+            if (!nextKey) break;
+
+            dispatchKey(nextKey);
+            burstCount += 1;
+            this.typedCount += 1;
+          }
+
+          if (burstCount > 0) {
+            this.idleCycles = 0;
+            this.setStatus(`一括入力中: ${this.typedCount}打鍵`);
+            continue;
+          }
+        }
+
+        if (isScreenActive("screen-completed")) {
+          this.stop(`完了しました / ${this.typedCount}打鍵`);
           continue;
         }
 
