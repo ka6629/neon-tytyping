@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ネオンタイピング 自動タイパーコントローラー</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, sans-serif;
+      background: #020617;
+      color: #f2f7ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .panel {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(8, 13, 24, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      padding: 28px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
+    }
+    p {
+      margin: 0 0 20px;
+      line-height: 1.8;
+      color: #b7c1d7;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #8fa4d4;
+      font-size: 0.95rem;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.04);
+      color: #f8fbff;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 14px 16px;
+      border: none;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #0c111f;
+      background: linear-gradient(135deg, #4ade80, #06b6d4);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 12px 30px rgba(6, 182, 212, 0.18);
+    }
+    button:hover {
+      transform: translateY(-1px);
+    }
+    button:disabled {
+      opacity: 0.55;
+      cursor: default;
+      box-shadow: none;
+    }
+    #stop-btn {
+      margin-top: 10px;
+      background: linear-gradient(135deg, #ef4444, #f97316);
+      color: #fff;
+      box-shadow: 0 12px 30px rgba(249, 115, 22, 0.18);
+    }
+    #status {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #dbeafe;
+      min-height: 48px;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+    .note {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #9fb5dc;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>ネオンタイピング 自動タイパーコントローラー</h1>
+    <p>同じ origin から `https://otonasi-muonn.github.io/typing_game/` を裏で開き、自動で高速入力します。拡張機能は不要です。</p>
+
+    <div class="field">
+      <label for="target-url">ターゲットページ URL</label>
+      <input id="target-url" type="text" value="https://otonasi-muonn.github.io/typing_game/" />
+    </div>
+
+    <div class="field">
+      <label for="delay-ms">キー入力遅延 (ms)</label>
+      <input id="delay-ms" type="number" min="0" value="0" />
+    </div>
+
+    <button id="open-btn">開始</button>
+    <button id="stop-btn" disabled>停止</button>
+
+    <div id="status">最初に「開始」を押してください。</div>
+  </div>
+
+  <script src="controller.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ネオンタイピング自動タイパー</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #f8fbff;
+      background: linear-gradient(180deg, #0d111a 0%, #111827 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .panel {
+      width: 100%;
+      max-width: 800px;
+      border-radius: 28px;
+      padding: 28px;
+      background: rgba(10, 18, 44, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+    }
+    p {
+      margin: 0 0 18px;
+      line-height: 1.7;
+      color: #c7d2fe;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+    .card {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+      color: #e2e8f0;
+    }
+    .card ol,
+    .card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #cbd5e1;
+    }
+    pre,
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: rgba(15, 23, 42, 0.95);
+      color: #f8fafc;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      padding: 14px;
+      resize: vertical;
+      min-height: 120px;
+    }
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 14px;
+      color: #0f172a;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, #22d3ee, #818cf8);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(34, 211, 238, 0.22);
+    }
+    .secondary {
+      background: linear-gradient(135deg, #38bdf8, #a78bfa);
+    }
+    .note {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 0.92rem;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>ネオンタイピング自動タイパー</h1>
+    <p>このページを GitHub Pages などにデプロイすると、別の PC から URL を送って使えるようになります。</p>
+
+    <div class="grid">
+      <div class="card">
+        <h2>使い方</h2>
+        <ol>
+          <li>まず <strong>別タブ</strong>で `https://otonasi-muonn.github.io/typing_game/` を開きます。</li>
+          <li>このページの下にある「ブックマークレットコードをコピー」を押します。</li>
+          <li>コピーしたコードをブラウザのブックマークの URL 部分に貼り付けて、ブックマークを作成します。</li>
+          <li>タイピングゲームページでそのブックマークをクリックすると、自動入力が開始します。</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h2>ブックマークレット</h2>
+        <p class="note">ブックマークに登録するか、コピーして手動で URL に貼り付けてください。</p>
+        <textarea id="bookmarklet-code" readonly></textarea>
+        <div style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <button id="copy-bookmarklet">ブックマークレットをコピー</button>
+          <button id="open-target" class="secondary">タイピングページを開く</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Console での使い方</h2>
+        <p>ブックマークレットが使えない場合は、`autotyper-console.js` を開いて、内容をコピーし、タイピングページの開発者ツール Console に貼り付けて実行してください。</p>
+        <ul>
+          <li><a href="autotyper-console.js" target="_blank" rel="noreferrer noopener">autotyper-console.js を開く</a></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>補足</h2>
+        <ul>
+          <li>このページ自体はホスト先の URL から開くだけで動きます。</li>
+          <li>GitHub Pages で公開すれば、他の PC に URL を送れます。</li>
+          <li>`controller.html` は別 origin からでは動作しないため、ブックマークレット方式を推奨します。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">このページを公開して URL を送れば、他の PC からも同じ手順で自動タイピングを使えます。</div>
+  </div>
+
+  <script src="deploy.js"></script>
+</body>
+</html>

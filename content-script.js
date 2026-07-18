@@ -136,5 +136,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 if (isTargetTypingPage()) {
+  // ページを開いた時点で自動起動する
+  startAutoTyping(AUTO_TYPE_DELAY_DEFAULT);
   window.addEventListener('beforeunload', stopAutoTyping);
 }
