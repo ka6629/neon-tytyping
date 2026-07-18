@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ネオンタイピング オートタイパー</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #ecf0f1;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid #00d4ff;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #00d4ff;
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.7);
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #b0b0b0;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: rgba(0, 20, 40, 0.5);
+      border-left: 4px solid #00d4ff;
+      border-radius: 5px;
+    }
+
+    .section-title {
+      color: #00d4ff;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .instruction-list {
+      list-style-position: inside;
+      line-height: 1.8;
+      color: #d0d0d0;
+    }
+
+    .instruction-list li {
+      margin-bottom: 10px;
+    }
+
+    .instruction-list strong {
+      color: #00d4ff;
+    }
+
+    .code-block {
+      background: #0a0a0a;
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .code-block-label {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #00d4ff;
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .copy-btn:hover {
+      background: #00e6ff;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+
+    .settings {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .setting-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .setting-label {
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .setting-input {
+      background: #0a0a0a;
+      border: 1px solid #333;
+      color: #00d4ff;
+      padding: 8px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .setting-input:focus {
+      outline: none;
+      border-color: #00d4ff;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: #00d4ff;
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      background: #00e6ff;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+      transform: scale(1.05);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid #00d4ff;
+      color: #00d4ff;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 212, 255, 0.1);
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    }
+
+    .warning-box {
+      background: rgba(255, 200, 0, 0.1);
+      border-left: 4px solid #ffc800;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      color: #ffdd99;
+    }
+
+    .warning-box strong {
+      color: #ffc800;
+    }
+
+    .status-box {
+      background: rgba(0, 100, 0, 0.1);
+      border-left: 4px solid #00dd00;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      color: #88ff88;
+      display: none;
+    }
+
+    .status-box.active {
+      display: block;
+    }
+
+    .status-box strong {
+      color: #00ff00;
+    }
+
+    .error-box {
+      background: rgba(255, 0, 0, 0.1);
+      border-left: 4px solid #ff3333;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      color: #ff9999;
+      display: none;
+    }
+
+    .error-box.active {
+      display: block;
+    }
+
+    .error-box strong {
+      color: #ff3333;
+    }
+
+    .tech-specs {
+      font-size: 12px;
+      color: #666;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎮 ネオンタイピング オートタイパー</h1>
+    <p class="subtitle">自動タイピング実行ツール</p>
+
+    <!-- 警告 -->
+    <div class="warning-box">
+      <strong>🔖 推奨方法:</strong> 下のブックマークレットをブックマークバーにドラッグしてください。ワンクリックで自動実行できます！
+    </div>
+
+    <!-- ステータス -->
+    <div id="status-box" class="status-box">
+      <strong>✓ コピーしました！</strong> ゲームサイトのコンソール（F12）に貼り付けて実行してください。
+    </div>
+
+    <!-- 使い方 -->
+    <div class="section">
+      <div class="section-title">📖 使い方</div>
+      <ol class="instruction-list">
+        <li><strong>ゲームサイトを開く:</strong> <a href="https://otonasi-muonn.github.io/typing_game/" target="_blank" style="color: #00d4ff;">https://otonasi-muonn.github.io/typing_game/</a></li>
+        <li><strong>コンソールを開く:</strong> F12キーを押すか、右クリック → <strong>要素を検証</strong> → <strong>コンソール</strong> タブを選択</li>
+        <li><strong>スクリプトをコピー:</strong> 下記のコードブロックで <strong>コピー</strong> ボタンをクリック</li>
+        <li><strong>貼り付け実行:</strong> コンソールに貼り付けて <strong>Enter キー</strong> を押す</li>
+        <li><strong>ゲーム開始:</strong> 自動的にゲームが開始し、タイピングが進行します</li>
+        <li><strong>停止:</strong> コンソール で <code>window.stopAutoTyper()</code> と入力して実行</li>
+      </ol>
+    </div>
+
+    <!-- スクリプト実行ウィンドウ -->
+    <div class="section">
+      <div class="section-title">⚙️ 設定</div>
+      
+      <div class="settings">
+        <div class="setting-item">
+          <label class="setting-label">入力遅延 (ミリ秒)</label>
+          <input type="number" id="delay-input" class="setting-input" value="0" min="0" max="1000" step="10">
+          <small style="color: #666; margin-top: 5px;">0 = 最高速 | 値が大きいほど遅い</small>
+        </div>
+        <div class="setting-item">
+          <label class="setting-label">バッチ処理上限</label>
+          <input type="number" id="batch-input" class="setting-input" value="120" min="1" max="500" step="10">
+          <small style="color: #666; margin-top: 5px;">1回の処理で入力するキー数の最大値</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- ブックマークレット -->
+    <div class="section">
+      <div class="section-title">🔖 ブックマークレット（推奨）</div>
+      <div class="code-block-label">下記のリンクをブックマークバーにドラッグ&ドロップ</div>
+      <div style="text-align: center; padding: 30px; background: rgba(0, 20, 40, 0.5); border-radius: 8px; margin: 15px 0;">
+        <a id="bookmarklet-link" 
+           href="javascript:void(0)" 
+           style="display: inline-block; padding: 15px 30px; background: #00d4ff; color: #000; border-radius: 8px; font-weight: bold; text-decoration: none; cursor: move; font-size: 16px; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);"
+           draggable="true"
+           ondragstart="event.dataTransfer.effectAllowed='copy'">
+          🚀 ネオンタイパー自動実行
+        </a>
+      </div>
+      <p style="text-align: center; color: #888; font-size: 12px; margin-top: 15px;">
+        このリンクをブラウザのブックマークバーにドラッグしてください<br>
+        その後、ゲームサイトを開いてブックマークをクリックすると自動実行されます
+      </p>
+    </div>
+
+    <!-- コンソール実行スクリプト -->
+    <div class="section">
+      <div class="section-title">🔧 実行スクリプト</div>
+      <div class="code-block-label">コピーして、ゲームサイトのコンソール（F12）に貼り付けてください</div>
+      <div class="code-block" id="script-block">
+        <button class="copy-btn" onclick="copyScriptCode()">コピー</button>
+        <pre id="script-code"></pre>
+      </div>
+    </div>
+
+    <!-- 高度な設定 -->
+    <div class="section">
+      <div class="section-title">🔐 高度な設定</div>
+      <div style="margin-bottom: 15px;">
+        <label style="color: #888; font-size: 12px;">デバッグモード:</label>
+        <input type="checkbox" id="debug-mode" style="margin-left: 10px;">
+        <small style="color: #666; margin-left: 10px;">詳細なログ出力を表示</small>
+      </div>
+      <div>
+        <button class="btn btn-secondary" onclick="showAdvancedInfo()">詳細情報を表示</button>
+      </div>
+    </div>
+
+    <!-- 技術仕様 -->
+    <div class="tech-specs">
+      <strong>技術情報:</strong><br>
+      • 拡張機能不要（ブラウザ標準機能のみ）<br>
+      • コンソール実行型スクリプト<br>
+      • ページをリロードしても継続実行<br>
+      • いつでも停止可能<br>
+      • 対応サイト: https://otonasi-muonn.github.io/typing_game/
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn btn-primary" onclick="openGameSite()">ゲームサイトを開く</button>
+      <button class="btn btn-secondary" onclick="copyScriptCode()">スクリプトをコピー</button>
+    </div>
+  </div>
+
+  <script>
+    // ブックマークレット用コンパクトスクリプト生成（設定ウィンドウを開く版）
+    function generateCompactScript() {
+      return `(function(){const settingsWindow=window.open('https://raw.githubusercontent.com/ka6629/neon-tytyping/main/neon-autotyper.html','neon_autotyper_settings','width=900,height=1000,left=100,top=100');if(!settingsWindow)alert('ポップアップがブロックされています。ブラウザの設定を確認してください。');})();`;
+    }
+
+    // 設定の取得
+    function getConfig() {
+      return {
+        delay: parseInt(document.getElementById('delay-input').value) || 0,
+        batch: parseInt(document.getElementById('batch-input').value) || 120,
+        debug: document.getElementById('debug-mode').checked
+      };
+    }
+
+    // ブックマークレットのhrefを更新
+    function updateBookmarklet() {
+      const compactScript = generateCompactScript();
+      const bookmarkletHref = `javascript:${compactScript}`;
+      const link = document.getElementById('bookmarklet-link');
+      if (link) {
+        link.href = bookmarkletHref;
+      }
+    }
+
+    // スクリプトコードの生成
+    function generateScript() {
+      const config = getConfig();
+      const script = `
+(function () {
+  const AUTO_TYPE_DELAY = ${config.delay};
+  const AUTO_TYPE_BATCH_LIMIT = ${config.batch};
+  const DEBUG_MODE = ${config.debug};
+  let enabled = false;
+  let timeoutId = null;
+
+  const log = (msg) => {
+    if (DEBUG_MODE) console.log('[AutoTyper] ' + msg);
+  };
+
+  const getCurrentScreen = () => {
+    const screenIdle = document.getElementById('screen-idle');
+    const screenPlaying = document.getElementById('screen-playing');
+    const screenCompleted = document.getElementById('screen-completed');
+    if (screenPlaying?.classList.contains('active')) return 'PLAYING';
+    if (screenCompleted?.classList.contains('active')) return 'COMPLETED';
+    if (screenIdle?.classList.contains('active')) return 'IDLE';
+    return null;
+  };
+
+  const getNextTypingKey = () => {
+    const current = document.getElementById('romaji-current')?.textContent?.trim();
+    const remaining = document.getElementById('romaji-remaining')?.textContent?.trim();
+    if (current) return current[0];
+    if (remaining) return remaining[0];
+    return null;
+  };
+
+  const makeKeyboardEvent = (key) => {
+    const code = (() => {
+      if (/^[a-z]$/i.test(key)) return \`Key\${key.toUpperCase()}\`;
+      if (key === '-') return 'Minus';
+      if (key === ',') return 'Comma';
+      if (key === '.') return 'Period';
+      return 'Unidentified';
+    })();
+
+    return new KeyboardEvent('keydown', {
+      key,
+      code,
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+      shiftKey: false,
+      ctrlKey: false,
+      altKey: false,
+      metaKey: false,
+      isComposing: false,
+    });
+  };
+
+  const dispatchTypingKey = (key) => {
+    if (!key) return;
+    window.dispatchEvent(makeKeyboardEvent(key));
+  };
+
+  const clickStartButtonIfIdle = () => {
+    const screenIdle = document.getElementById('screen-idle');
+    const startButton = document.getElementById('btn-start');
+    if (screenIdle?.classList.contains('active') && startButton) {
+      log('Clicking start button...');
+      startButton.click();
+    }
+  };
+
+  const runAutoTyping = () => {
+    if (!enabled) return;
+
+    const currentScreen = getCurrentScreen();
+    if (currentScreen === 'IDLE') {
+      clickStartButtonIfIdle();
+      scheduleNextTick();
+      return;
+    }
+
+    if (currentScreen !== 'PLAYING') return;
+
+    let nextKey = getNextTypingKey();
+    let batchCount = 0;
+
+    while (enabled && nextKey && batchCount < AUTO_TYPE_BATCH_LIMIT) {
+      dispatchTypingKey(nextKey);
+      batchCount += 1;
+      if (getCurrentScreen() !== 'PLAYING') return;
+      nextKey = getNextTypingKey();
+    }
+
+    scheduleNextTick();
+  };
+
+  const scheduleNextTick = () => {
+    if (!enabled) return;
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(runAutoTyping, AUTO_TYPE_DELAY);
+  };
+
+  window.startAutoTyper = () => {
+    if (enabled) return;
+    enabled = true;
+    log('Auto Typesrc started!');
+    runAutoTyping();
+  };
+
+  window.stopAutoTyper = () => {
+    enabled = false;
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+    log('Auto Typer stopped.');
+  };
+
+  window.addEventListener('beforeunload', window.stopAutoTyper);
+  
+  // 自動開始
+  window.startAutoTyper();
+})();
+`;
+      return script.trim();
+    }
+
+    // スクリプトコードを画面に表示
+    function updateScriptDisplay() {
+      document.getElementById('script-code').textContent = generateScript();
+      updateBookmarklet();
+    }
+
+    // コピー機能
+    function copyScriptCode() {
+      const script = generateScript();
+      navigator.clipboard.writeText(script).then(() => {
+        const statusBox = document.getElementById('status-box');
+        statusBox.classList.add('active');
+        setTimeout(() => {
+          statusBox.classList.remove('active');
+        }, 3000);
+      });
+    }
+
+    // ゲームサイトを開く
+    function openGameSite() {
+      window.open('https://otonasi-muonn.github.io/typing_game/', '_blank');
+    }
+
+    // 高度な情報を表示
+    function showAdvancedInfo() {
+      const info = `
+========== ネオンタイピング オートタイパー 情報 ==========
+
+【ブックマークレット】
+✓ ブラウザのブックマークバーにドラッグ&ドロップ
+✓ ゲームサイトを開いてクリックするだけで自動実行
+✓ コンソール操作は一切不要
+
+【動作確認方法】
+1. ゲームサイト: https://otonasi-muonn.github.io/typing_game/ を開く
+2. F12キーでコンソールを開く
+3. 下記コマンドを実行:
+   startAutoTyper()  // 開始
+   stopAutoTyper()   // 停止
+
+【トラブルシューティング】
+- スクリプトが動作しない → コンソールのエラーメッセージを確認
+- DOMが見つからない → ゲームサイトが完全に読み込まれるまで待つ
+- 入力がされない → 設定でDEBUG_MODEを有効にしてログを確認
+
+【カスタマイズ】
+- AUTO_TYPE_DELAY: 入力間隔（ミリ秒）
+- AUTO_TYPE_BATCH_LIMIT: 1回のループで処理するキー数
+- DEBUG_MODE: ログ出力（true/false）
+
+【対応ブラウザ】
+- Chrome, Firefox, Safari, Edge 等（ES6対応のモダンブラウザ）
+
+【API リファレンス】
+- window.startAutoTyper()  : タイパーを開始
+- window.stopAutoTyper()   : タイパーを停止
+- getCurrentScreen()       : 現在の画面状態を取得（内部用）
+- getNextTypingKey()       : 次の入力キーを取得（内部用）
+
+======================================
+`;
+      alert(info);
+    }
+
+    // 初期化
+    document.getElementById('delay-input').addEventListener('input', updateScriptDisplay);
+    document.getElementById('batch-input').addEventListener('input', updateScriptDisplay);
+    document.getElementById('debug-mode').addEventListener('change', updateScriptDisplay);
+
+    // 最初の表示
+    updateScriptDisplay();
+  </script>
+</body>
+</html>
